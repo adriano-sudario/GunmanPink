@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GunmanPink : MonoBehaviour
@@ -8,7 +7,6 @@ public class GunmanPink : MonoBehaviour
     GameController gameController;
     Vector3 middleOfScreen;
     bool canShoot = true;
-    List<BulletController> bullets = new List<BulletController>();
     
     void Start()
     {
@@ -20,11 +18,14 @@ public class GunmanPink : MonoBehaviour
     
     void Update()
     {
+        if (gameController.hasLost || !gameController.hasBegun)
+            return;
+
         Vector3 cameraVector = Input.mousePosition - middleOfScreen;
         Vector3 flipped = new Vector3(cameraVector.x, 0f, cameraVector.y);
         transform.LookAt(flipped);
 
-        if (Input.GetMouseButtonDown(0) && canShoot)
+        if (Input.GetMouseButtonDown(0) && canShoot && !gameController.hasBulletsEnded)
             StartCoroutine(Shoot());
     }
 
@@ -33,7 +34,9 @@ public class GunmanPink : MonoBehaviour
         canShoot = false;
         BulletController bulletInstance = Instantiate(bullet, bullet.transform.position, bullet.transform.rotation);
         bulletInstance.Appear();
-        bullets.Add(bulletInstance);
+        gameController.bullets.Add(bulletInstance);
+        gameController.bulletsCount--;
+
         yield return new WaitForSeconds(1);
         canShoot = true;
     }

@@ -1,6 +1,6 @@
-﻿using System.Collections; using System.Collections.Generic; using UnityEngine;  public class BulletController : MonoBehaviour {     Vector3 moveDirection;     GameController gameController;      public float speed = 1f;     public bool isMoving = true;      void Awake()     {         gameController = FindObjectOfType<GameController>();         moveDirection = transform.TransformDirection(new Vector3(0, 0, speed));     }      void Update()     {         if (!isMoving)             return;          transform.position += moveDirection * Time.deltaTime;
-
-        if (transform.position.x < -11.56 || transform.position.x > 11.56 ||
-            transform.position.z < -12.98 || transform.position.z > 12.98)
-            Destroy(gameObject);
-    }      public void Hide()     {         MeshRenderer render = gameObject.GetComponentInChildren<MeshRenderer>();         render.enabled = false;         isMoving = false;         moveDirection = Vector3.zero;     }      public void Appear()     {         MeshRenderer render = gameObject.GetComponentInChildren<MeshRenderer>();         render.enabled = true;         isMoving = true;     } } 
+﻿using UnityEngine;  public class BulletController : MonoBehaviour {     Vector3 moveDirection;     GameController gameController;      public float speed = 1f;     public bool isMoving = true;      void Awake()     {         gameController = FindObjectOfType<GameController>();         moveDirection = transform.TransformDirection(new Vector3(0, 0, speed));     }      void Update()     {         if (!isMoving)             return;          transform.position += moveDirection * Time.deltaTime;
+    }      public void Hide()     {         MeshRenderer render = gameObject.GetComponentInChildren<MeshRenderer>();         render.enabled = false;         isMoving = false;         moveDirection = Vector3.zero;     }      public void Appear()     {         MeshRenderer render = gameObject.GetComponentInChildren<MeshRenderer>();         render.enabled = true;         isMoving = true;     }      void OnBecameInvisible()
+    {
+        gameController.bullets.Remove(this);
+        Destroy(gameObject);
+    } } 
