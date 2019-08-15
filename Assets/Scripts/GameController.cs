@@ -108,7 +108,7 @@ public class GameController : MonoBehaviour
 
     void Lose()
     {
-        Debug.Log("oooxi " + _bulletsCount);
+        Debug.Log("teste " + bullets.Count);
         hasLost = true;
         loseInfo.gameObject.SetActive(true);
         string[] diseases = new string[]
